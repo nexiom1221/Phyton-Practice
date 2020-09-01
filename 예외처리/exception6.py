@@ -3,7 +3,7 @@ list_number = [52,273,32,72,100]
 try:
     number_input = int(input("정수 입력>"))
 
-    print("{}번쨰 요소: {}".format(number_input, list_number[number_input]))
+    print("{}번쨰 요소: {}".format(number_input, list_number[number_input-1]))
 
 except ValueError:
     print("정수를 입력하세요")
