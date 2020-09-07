@@ -1,3 +1,4 @@
+import random
 import pygame
 ############################################################
 # 기본 초기화 (반드시 해야 하는 것들)
@@ -34,12 +35,12 @@ enumy = pygame.image.load("C:/Users/LG/Desktop/9.4 파이썬/파이썬게임/pyg
 enumy_size = character.get_rect().size
 enumy_width = character_size[0]
 enumy_height = character_size[1]
-enumy_x_pos = (screen_width /2) - (enumy_width / 2)
+enumy_x_pos = random.randint(0, screen_width - enumy_width)
 enumy_y_pos = (enumy_height /2) - (enumy_height / 2)
-
+enumy_speed = 10
 game_font = pygame.font.Font(None, 40)
 
-total_time = 10
+total_time = 100
 
 start_ticks = pygame.time.get_ticks()
 
@@ -61,6 +62,8 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 to_x += character_speed
                 
+        
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 to_x = 0
@@ -70,11 +73,30 @@ while running:
         character_x_pos = 0
     elif character_x_pos > screen_width - character_width:
         character_x_pos = screen_width - character_width
+
+    enumy_y_pos += enumy_speed
+
+    if enumy_y_pos > screen_height:
+        enumy_y_pos = 0
+        enumy_x_pos = random.randint(0, screen_width - enumy_width)
     # 4. 충돌 처리
+    
+    character_rect = character.get_rect()
+    character_rect.left = character_x_pos
+    character_rect.top = character_y_pos
+
+    enumy_rect = enumy.get_rect()
+    enumy_rect.left = enumy_x_pos
+    enumy_rect.top = enumy_y_pos
+
+    if character_rect.colliderect(enumy_rect):
+        print("충돌")
+        running = False
 
     # 5. 화면에 그리기
     screen.blit(background, (0,0))
     screen.blit(character, (character_x_pos, character_y_pos))
+    screen.blit(enumy, (enumy_x_pos, enumy_y_pos))
 
     elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000
 
